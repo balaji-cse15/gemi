@@ -1,9 +1,9 @@
-# Gemi
+# Gemi — Claude-Code-style CLI for your own local LLM fleet
 
-> A Claude-Code-style CLI that drives a fleet of **local LLM agents**.
-> Multi-agent delegation, MCP support, plugins, sub-agent tasks, autopilot,
-> 100+ built-in tools (file, shell, web, security, free public APIs),
-> hooks, caching, energy/cost tracking.
+> Drive a fleet of locally-hosted LLMs from a single terminal: multi-agent
+> delegation, 100+ built-in tools, MCP, hooks, autopilot, sub-agent tasks,
+> plugins, energy/cost tracking. Zero cloud calls, zero API bills, your
+> hardware, your data, your weights.
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
@@ -14,16 +14,28 @@
   <img src="assets/banner.svg" alt="Gemi banner showing Local Agent 2 ready" width="800"/>
 </p>
 
-```
-   ######  ######## ##     ## ####
-  ##    ## ##       ###   ###  ##
-  ##       ##       #### ####  ##
-  ##  ###  ######   ## ### ##  ##
-  ##   ##  ##       ##     ##  ##
-  ##    ## ##       ##     ##  ##
-   ######  ######## ##     ## ####
-    *  local-fleet AI coding assistant
-```
+## TL;DR — what is this?
+
+Gemi is a terminal coding assistant in the spirit of Anthropic's
+**Claude Code**, except every model call is served by a `llama-server`
+running on **your own GPU**. You configure however many GGUF models you can
+fit (a "fleet"), and the CLI talks to them over an Anthropic-Messages-API
+proxy, so the whole tool/agent loop — file edits, shell, MCP servers,
+hooks, sub-agents, autopilot — runs without a cloud round-trip.
+
+It's built for people who:
+- Want a Claude-Code-grade UX for **local models** (Qwen3, Llama, Mistral, …)
+- Need to keep prompts/code/data **off third-party servers** (compliance,
+  IP, legal, cost, or just principle)
+- Have one or more GPUs and want to keep them **busy** instead of paying
+  per-token rates
+- Like the **multi-agent** pattern: route fast tasks to a small model, hard
+  tasks to a big model, run jobs in parallel, pivot on the fly
+
+You bring `llama.cpp`, GGUFs, and (optionally) a proxy like
+[`free-claude-code`](https://github.com/spectrobit/free-claude-code).
+Gemi brings the agent loop, the tool catalogue, the launcher, and the
+terminal UI.
 
 ---
 
@@ -81,12 +93,30 @@ See [DISCLAIMER.md](DISCLAIMER.md) for the full text.
 
 ---
 
-## What it is
+## How the pieces fit together
 
-Gemi is a terminal CLI for talking to local LLMs running on your own hardware.
-It connects to one or more **`llama-server`** instances (typically on ports
-8001-801N) through Anthropic-Messages-API-compatible proxies (e.g.
-[`free-claude-code`](https://github.com/spectrobit/free-claude-code)) on ports 9001-901N.
+```
+  ┌─────────────┐    streaming     ┌──────────────────┐    OpenAI API     ┌────────────────┐
+  │  gemi CLI   │ ───────────────▶ │  proxy (9001+)   │ ────────────────▶ │  llama-server  │
+  │ (this repo) │ ◀─────────────── │ Anthropic→OAI    │ ◀──────────────── │   (8001+)      │
+  └─────────────┘   tool calls,    └──────────────────┘     completions   └────────────────┘
+                    edits, hooks                                              │
+                                                                              ▼
+                                                                          your GGUF
+```
+
+- **`llama-server`** (from llama.cpp) loads a GGUF and exposes an
+  OpenAI-compatible HTTP endpoint on port `8001+N`.
+- A **proxy** like [`free-claude-code`](https://github.com/spectrobit/free-claude-code)
+  re-shapes the Anthropic Messages API on port `9001+N` into OpenAI calls
+  for `llama-server`. This lets the CLI use the exact same agent-loop logic
+  as Claude Code.
+- **`gemi`** is the CLI: REPL, slash commands, tool registry, hooks engine,
+  MCP client, sub-agent task system, profiles, autopilot, session save/resume.
+- Your `~/.gemi/agents.json` lists the fleet. `gemi -a <slug>` (or `Ctrl+M`
+  to pick interactively) selects one. The single launcher `gemi.ps1` boots
+  the per-agent `start.ps1` (see `examples/agent-template/`) which spawns
+  `llama-server` + proxy and waits for the ports to come up.
 
 Where Claude Code talks to the Anthropic API, Gemi talks to *your* fleet.
 
