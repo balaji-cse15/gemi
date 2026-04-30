@@ -95,6 +95,7 @@ from .sqlite_tool import SqliteTool
 # --- Multi-agent orchestration tools ---
 from .agent_call import AgentCallTool, AgentVoteTool
 from .task import TaskTool
+from .todo import TodoWriteTool
 
 # --- Free public-API tools (no keys needed) ---
 from .free_apis import FREE_API_TOOLS
@@ -185,10 +186,11 @@ ALL_TOOLS: list[Tool] = [
     # Analysis (2)
     CodeAnalysisTool(),
     SqliteTool(),
-    # Multi-agent orchestration (3)
+    # Multi-agent orchestration (4)
     AgentCallTool(),
     AgentVoteTool(),
     TaskTool(),
+    TodoWriteTool(),
     # Offensive-security suite
     ExploitsTool(),
 ] + FREE_API_TOOLS + RECON_TOOLS + CIPHER_TOOLS + HASH_TOOLS + WEBSEC_TOOLS + API_TEST_TOOLS
@@ -214,8 +216,8 @@ ESSENTIAL_TOOLS = {
     "multi_edit",
     # Shell
     "bash", "shell", "git", "task_runner",
-    # Reasoning + delegation
-    "think", "agent_call", "task",
+    # Reasoning + delegation + planning
+    "think", "agent_call", "task", "todo_write",
     # Data
     "json_parse",
     # Web

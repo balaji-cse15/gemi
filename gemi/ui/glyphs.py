@@ -70,6 +70,28 @@ BOX_DOUBLE = {
 
 # --- Status indicators ------------------------------------------------
 
+# Canonical names matching the `figures` npm package Claude Code uses.
+# Two variants for each — heavy (figures default) and light (Gemi legacy).
+TICK = "✔"               # figures.tick    — completed/success badge
+CROSS_HEAVY = "✖"        # figures.cross   — error badge
+WARNING_TRI = "⚠"        # figures.warning
+INFO_I = "ℹ"             # figures.info
+CIRCLE = "◯"             # figures.circle  — pending big
+CIRCLE_FILLED = "◉"      # figures.circleFilled
+ELLIPSIS = "…"           # figures.ellipsis
+POINTER = "❯"            # figures.pointer        — selected option
+POINTER_SMALL = "›"      # figures.pointerSmall   — inline arrow
+ARROW_RIGHT_FIG = "→"    # figures.arrowRight
+PLAY = "▶"               # figures.play
+SQUARE_SMALL = "◻"       # figures.squareSmall          — pending todo
+SQUARE_SMALL_FILLED = "◼"  # figures.squareSmallFilled  — in_progress todo
+BULLET = "●"             # figures.bullet
+LINE_DBL_VERTICAL = "║"
+TREE_BRANCH = "⏺"        # tool-call start (Claude Code's compact tool form)
+TREE_CONTINUE = "⎿"      # tool-call result corner
+MIDDOT = "·"             # byline separator
+
+# Legacy Gemi names (kept for back-compat with existing render.py imports)
 CHECK = "✓"
 CROSS = "✗"
 DOT_FILLED = "●"
