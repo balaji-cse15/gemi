@@ -31,7 +31,7 @@ class WebsecHeadersTool(Tool):
     name = "websec_headers"
     dangerous = True
     description = (
-        "Security-headers audit. Fetches the URL once and grades CSP, HSTS, "
+        "AUTHORIZED USE ONLY. Security-headers audit. Fetches the URL once and grades CSP, HSTS, "
         "X-Frame-Options, X-Content-Type-Options, Referrer-Policy, "
         "Permissions-Policy, COOP/COEP/CORP, Cache-Control on auth pages."
     )
@@ -134,7 +134,7 @@ class WebsecMethodsTool(Tool):
     name = "websec_methods"
     dangerous = True
     description = (
-        "HTTP method tampering — probe all standard methods (GET, POST, PUT, "
+        "AUTHORIZED USE ONLY. HTTP method tampering — probe all standard methods (GET, POST, PUT, "
         "DELETE, PATCH, OPTIONS, HEAD, TRACE, CONNECT) and report which the "
         "server allows + how it responds."
     )
@@ -174,7 +174,7 @@ class WebsecCorsTool(Tool):
     name = "websec_cors"
     dangerous = True
     description = (
-        "CORS misconfig probe. Sends multiple Origin variants and reports which "
+        "AUTHORIZED USE ONLY. CORS misconfig probe. Sends multiple Origin variants and reports which "
         "are reflected in Access-Control-Allow-Origin (often with credentials)."
     )
     input_schema = {
@@ -230,7 +230,7 @@ class WebsecXssSmokeTool(Tool):
     name = "websec_xss_smoke"
     dangerous = True
     description = (
-        "Reflective-XSS smoke test. Adds a tracer string to every query "
+        "AUTHORIZED USE ONLY. Reflective-XSS smoke test. Adds a tracer string to every query "
         "parameter and checks if it's reflected unescaped in the response. "
         "Doesn't run JS — just checks byte-for-byte echo and HTML escaping."
     )
@@ -290,7 +290,7 @@ class WebsecSqliSmokeTool(Tool):
     name = "websec_sqli_smoke"
     dangerous = True
     description = (
-        "SQL injection smoke test. For each query parameter, sends boolean "
+        "AUTHORIZED USE ONLY. SQL injection smoke test. For each query parameter, sends boolean "
         "(`' AND 1=1`/`' AND 1=2`) and time-based (`'; SELECT pg_sleep(3)`) "
         "probes and reports response-length deltas + RT spikes."
     )

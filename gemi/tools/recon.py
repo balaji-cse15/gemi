@@ -52,7 +52,7 @@ class ReconSubdomainsTool(Tool):
     name = "recon_subdomains"
     dangerous = True
     description = (
-        "Subdomain enumeration via crt.sh (certificate transparency logs). "
+        "AUTHORIZED USE ONLY. Subdomain enumeration via crt.sh (certificate transparency logs). "
         "Passive recon — does NOT touch the target. Free, no API key."
     )
     input_schema = {
@@ -98,7 +98,7 @@ class ReconDnsTool(Tool):
     name = "recon_dns"
     dangerous = True
     description = (
-        "DNS record lookup via Cloudflare's DoH endpoint (no extra deps). "
+        "AUTHORIZED USE ONLY. DNS record lookup via Cloudflare's DoH endpoint (no extra deps). "
         "Returns A, AAAA, MX, NS, TXT, CAA, SOA in one call."
     )
     input_schema = {
@@ -202,7 +202,7 @@ class ReconFingerprintTool(Tool):
     name = "recon_fingerprint"
     dangerous = True
     description = (
-        "Web tech fingerprinting: probes a URL and infers server, framework, "
+        "AUTHORIZED USE ONLY. Web tech fingerprinting: probes a URL and infers server, framework, "
         "JS libraries, CMS, CDN, and security headers from response signatures."
     )
     input_schema = {
@@ -323,7 +323,7 @@ class ReconRobotsTool(Tool):
     name = "recon_robots"
     dangerous = True
     description = (
-        "Fetch robots.txt, sitemap.xml, and probe common .well-known endpoints "
+        "AUTHORIZED USE ONLY. Fetch robots.txt, sitemap.xml, and probe common .well-known endpoints "
         "(security.txt, change-password, openid-configuration, etc.)."
     )
     input_schema = {
@@ -394,7 +394,7 @@ class ReconPortsTool(Tool):
     name = "recon_ports"
     dangerous = True
     description = (
-        "Connect-scan + banner grab on a single host. Pass a port range "
+        "AUTHORIZED USE ONLY. Connect-scan + banner grab on a single host. Pass a port range "
         "(e.g. '1-1024') or comma list (e.g. '22,80,443,3306,8080'). "
         "Authorized targets only."
     )
@@ -501,7 +501,7 @@ class ReconWhoisRdapTool(Tool):
     name = "recon_whois"
     dangerous = True
     description = (
-        "Lightweight WHOIS via RDAP (no whois binary needed). Domain or IP. "
+        "AUTHORIZED USE ONLY. Lightweight WHOIS via RDAP (no whois binary needed). Domain or IP. "
         "Uses rdap.org redirect service."
     )
     input_schema = {

@@ -44,7 +44,7 @@ class ApiGraphqlIntrospectTool(Tool):
     name = "api_introspect_graphql"
     dangerous = True
     description = (
-        "Run a GraphQL introspection query against an endpoint. Returns the "
+        "AUTHORIZED USE ONLY. Run a GraphQL introspection query against an endpoint. Returns the "
         "full schema (queries, mutations, types, enums). Useful for finding "
         "hidden mutations or admin types."
     )
@@ -125,7 +125,7 @@ class ApiOpenapiDiscoverTool(Tool):
     name = "api_openapi_discover"
     dangerous = True
     description = (
-        "Find OpenAPI/Swagger specs at common paths. Returns list of working "
+        "AUTHORIZED USE ONLY. Find OpenAPI/Swagger specs at common paths. Returns list of working "
         "spec URLs and a quick endpoint summary."
     )
     input_schema = {
@@ -189,7 +189,7 @@ class ApiRateLimitProbeTool(Tool):
     name = "api_rate_limit_probe"
     dangerous = True
     description = (
-        "Send N parallel requests to an endpoint and observe rate-limit "
+        "AUTHORIZED USE ONLY. Send N parallel requests to an endpoint and observe rate-limit "
         "behaviour: 429 status, X-RateLimit-* headers, retry-after."
     )
     input_schema = {
@@ -269,7 +269,7 @@ class ApiAuthBypassHeadersTool(Tool):
     name = "api_auth_bypass"
     dangerous = True
     description = (
-        "Try common auth-bypass header tricks (X-Forwarded-For, X-Original-URL, "
+        "AUTHORIZED USE ONLY. Try common auth-bypass header tricks (X-Forwarded-For, X-Original-URL, "
         "X-Custom-IP-Authorization, etc.) against a forbidden endpoint and "
         "report which ones change the response."
     )

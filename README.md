@@ -16,6 +16,50 @@
     *  local-fleet AI coding assistant
 ```
 
+---
+
+## ⚠️ DISCLAIMER — Read before using the security tools
+
+Gemi ships with a comprehensive **offensive-security toolkit** —
+exploit payload library (SQLi/XSS/SSRF/XXE/SSTI/JWT), reconnaissance
+(subdomain enum, DNS, port scanning, banner grabbing, web fingerprinting),
+cipher and hash analysis, OWASP web-security probes, GraphQL/REST API
+testing, and shell tools (`bash`, `cmd`, `powershell`, `git`).
+
+**These tools are provided for ETHICAL and LEGAL purposes ONLY:**
+
+- ✅ Pentesting **systems you own** or have **explicit written authorization** to test
+- ✅ Bug-bounty programs operating within published scope
+- ✅ Capture-the-Flag (CTF) competitions and educational labs
+- ✅ Security research on **your own** infrastructure
+- ✅ Defensive security work, red-team exercises with authorization
+- ✅ Coursework, training, and academic study
+
+**Prohibited uses include:**
+
+- ❌ Unauthorized scanning, exploitation, or reconnaissance of systems you
+  do not own and do not have explicit written permission to test
+- ❌ Any activity that violates applicable laws (CFAA in the US, Computer
+  Misuse Act in the UK, GDPR, equivalent statutes in your jurisdiction)
+- ❌ Targeting individuals, harassment, doxxing, or stalking
+- ❌ Disrupting services, systems, or networks without authorization
+- ❌ Bypassing access controls without authorization
+- ❌ Any activity prohibited by the terms of service of a target platform
+
+**By using Gemi you accept full legal and ethical responsibility for your
+actions.** The author and contributors:
+
+- Provide this software **AS IS**, with NO warranty (see [LICENSE](LICENSE))
+- Accept **NO liability** for misuse, damages, or legal consequences
+- Did not write Gemi to enable illegal activity
+
+If in doubt about whether your intended use is authorized, **stop and
+get written permission first**. When in doubt, don't.
+
+See [DISCLAIMER.md](DISCLAIMER.md) for the full text.
+
+---
+
 ```
 > what's the weather in Tokyo and the top hacker news story right now
 ✻  fetching both in parallel...

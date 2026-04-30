@@ -288,9 +288,38 @@ class BuddyApp:
         return len(self.workspace_ctx.files)
 
     def set_yolo(self, enabled: bool) -> None:
+        was_off = not self.yolo
         self.yolo = enabled
         if self.engine:
             self.engine.bypass_permissions = enabled
+        # First-time YOLO activation in this session: show legal/ethics warning
+        if enabled and was_off and not getattr(self, "_yolo_warned", False):
+            self._show_yolo_warning()
+            self._yolo_warned = True
+
+    def _show_yolo_warning(self) -> None:
+        """Display a prominent ethics + legal-use reminder when YOLO turns on."""
+        from .ui.theme import get_palette, get_active_theme_name
+        palette = get_palette(get_active_theme_name())
+        c = self.console
+        c.print()
+        c.print(f"  [bold {palette.yolo}]⚡ YOLO MODE ACTIVE[/]  "
+                f"[muted]all permission gates bypassed, dangerous tools enabled[/]")
+        c.print()
+        c.print(f"  [bold {palette.warning}]⚠  Authorized use only.[/]  "
+                f"[muted]Offensive tools (exploits, recon, websec, api_test,[/]")
+        c.print(f"  [muted]bash, cmd, powershell, hash_crack, payload_gen) are for:[/]")
+        c.print(f"  [muted]  • systems you own or have written permission to test[/]")
+        c.print(f"  [muted]  • bug-bounty programs within published scope[/]")
+        c.print(f"  [muted]  • CTFs, educational labs, authorized red-team work[/]")
+        c.print()
+        c.print(f"  [muted]Unauthorized use violates the CFAA / Computer Misuse Act /[/]")
+        c.print(f"  [muted]equivalent statutes in your jurisdiction. You alone bear[/]")
+        c.print(f"  [muted]the legal and ethical responsibility for what you do.[/]")
+        c.print()
+        c.print(f"  [muted]See[/]  [bold {palette.buddy_shimmer}]DISCLAIMER.md[/]  "
+                f"[muted]for full terms.[/]")
+        c.print()
 
     def set_plan_mode(self, enabled: bool) -> None:
         self.plan_mode = enabled
