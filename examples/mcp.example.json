@@ -1,0 +1,140 @@
+{
+  "_comment": "Gemi MCP server registry — drop this as ~/.gemi/mcp.json. All servers below are FREE (no paid APIs, no proprietary keys). Servers requiring auth are commented out as templates with ${ENV_VAR} placeholders.",
+  "_credentials_note": "For servers needing tokens, set the env var in your shell (e.g. `export GITHUB_TOKEN=ghp_...`). The ${VAR} substitution happens at server startup.",
+
+  "servers": {
+
+    "filesystem": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "tags": ["essential", "files"],
+      "description": "Read/write files in the current directory tree",
+      "enabled": true
+    },
+
+    "fetch": {
+      "transport": "stdio",
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
+      "tags": ["essential", "web"],
+      "description": "HTTP fetch with markdown/HTML extraction",
+      "enabled": true
+    },
+
+    "memory": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "tags": ["essential"],
+      "description": "Persistent knowledge-graph memory (entities, relations)",
+      "enabled": true
+    },
+
+    "sequential-thinking": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "tags": ["reasoning"],
+      "description": "Structured step-by-step thinking tool",
+      "enabled": true
+    },
+
+    "time": {
+      "transport": "stdio",
+      "command": "uvx",
+      "args": ["mcp-server-time"],
+      "tags": ["utility"],
+      "description": "Current time, timezone conversions, time math",
+      "enabled": true
+    },
+
+    "context7": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "tags": ["docs"],
+      "description": "Library docs lookup (resolve-library-id, get-library-docs)",
+      "enabled": true
+    },
+
+    "duckduckgo": {
+      "transport": "stdio",
+      "command": "uvx",
+      "args": ["duckduckgo-mcp-server"],
+      "tags": ["search"],
+      "description": "DuckDuckGo web search (no API key)",
+      "enabled": true
+    },
+
+    "wikipedia": {
+      "transport": "stdio",
+      "command": "uvx",
+      "args": ["wikipedia-mcp"],
+      "tags": ["search"],
+      "description": "Wikipedia article search and content (no key)",
+      "enabled": true
+    },
+
+    "git": {
+      "transport": "stdio",
+      "command": "uvx",
+      "args": ["mcp-server-git", "--repository", "."],
+      "tags": ["dev", "git"],
+      "description": "Git ops scoped to current dir: status, diff, log, blame, show",
+      "enabled": false
+    },
+
+    "_optional_paid": "--- Servers below need credentials. Uncomment + fill ${VARS} to activate ---",
+
+    "github": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {"GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"},
+      "tags": ["dev"],
+      "description": "GitHub API. Requires $GITHUB_TOKEN env var.",
+      "enabled": false
+    },
+
+    "supabase": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase", "--access-token", "${SUPABASE_ACCESS_TOKEN}"],
+      "tags": ["dev", "database"],
+      "description": "Supabase. Requires $SUPABASE_ACCESS_TOKEN.",
+      "enabled": false
+    },
+
+    "notion": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "OPENAPI_MCP_HEADERS": "{\"Authorization\":\"Bearer ${NOTION_TOKEN}\",\"Notion-Version\":\"2022-06-28\"}"
+      },
+      "tags": ["productivity"],
+      "description": "Notion. Requires $NOTION_TOKEN integration token.",
+      "enabled": false
+    },
+
+    "brave-search": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {"BRAVE_API_KEY": "${BRAVE_API_KEY}"},
+      "tags": ["search"],
+      "description": "Brave web search. Requires $BRAVE_API_KEY (free tier exists).",
+      "enabled": false
+    },
+
+    "playwright": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "tags": ["browser"],
+      "description": "Playwright browser automation (free, no key)",
+      "enabled": false
+    }
+  }
+}

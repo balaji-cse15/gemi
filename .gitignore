@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Virtual envs
+venv/
+.venv/
+env/
+ENV/
+.python-version
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Gemi runtime data (user-private)
+.gemi/
+*.session.json
+
+# Logs
+*.log
+logs/
+
+# Local configs that may contain secrets
+agents.json
+mcp.json
+hooks.json
+permissions.json
+profiles.json
+.env
+.env.local
+*.pid
+
+# Model files (multi-GB binaries; users download themselves)
+*.gguf
+*.safetensors
+*.bin
+*.ckpt
+*.pt
+
+# OS
+desktop.ini
+
+# Build artifacts
+*.tar.gz
+*.zip

@@ -1,0 +1,34 @@
+{
+  "_comment": "Allow/deny rules layered on top of the SAFE/WRITE/YOLO tier system. Drop this as ~/.gemi/permissions.json. Default safety denies (rm -rf /, fork bombs, .ssh/id_rsa, .aws/credentials) are built-in and don't need to be repeated here.",
+
+  "allow": [
+    {
+      "tool": "bash",
+      "pattern": "^(ls|pwd|cat|head|tail|echo|date|whoami) ",
+      "description": "Auto-approve safe read-only shell commands"
+    },
+    {
+      "tool": "git",
+      "pattern": "^(status|log|diff|show|branch|remote)\\b",
+      "description": "Auto-approve read-only git commands"
+    }
+  ],
+
+  "deny": [
+    {
+      "tool": "bash",
+      "pattern": "curl\\s+[^|]*\\|\\s*(bash|sh|python)",
+      "description": "Block 'curl | bash' style remote-code-execution"
+    },
+    {
+      "tool": "bash",
+      "pattern": "shutdown|reboot|halt|poweroff",
+      "description": "Block system power commands"
+    },
+    {
+      "tool": "powershell",
+      "pattern": "Stop-Computer|Restart-Computer",
+      "description": "Block PowerShell power commands"
+    }
+  ]
+}

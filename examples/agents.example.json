@@ -1,0 +1,51 @@
+{
+  "_comment": "Drop this file as ./agents.json in your workspace OR ~/.gemi/agents.json. Each entry describes one local agent — its slug, the directory containing its launcher\\start.ps1, the llama-server port, and the proxy port. See README.md for full setup instructions.",
+
+  "agents": [
+    {
+      "slug": "local-agent-1",
+      "name": "Local Agent 1",
+      "directory": "agent-1",
+      "port": 8001,
+      "proxy_port": 9001,
+      "role": "general coder",
+      "model": "Qwen3.6-35B-A3B-Q4_K_M.gguf",
+      "quant": "Q4_K_M",
+      "context": 16384,
+      "parallel": 2,
+      "can_think": true,
+      "quality_tier": "high",
+      "chat_template": "qwen36"
+    },
+    {
+      "slug": "local-agent-2",
+      "name": "Local Agent 2",
+      "directory": "agent-2",
+      "port": 8002,
+      "proxy_port": 9002,
+      "role": "precision coder",
+      "model": "Qwen3.6-35B-A3B-Q8_K_P.gguf",
+      "quant": "Q8_K_P",
+      "context": 8192,
+      "parallel": 1,
+      "can_think": true,
+      "quality_tier": "premium",
+      "chat_template": "qwen36"
+    },
+    {
+      "slug": "local-agent-3",
+      "name": "Local Agent 3",
+      "directory": "agent-3",
+      "port": 8003,
+      "proxy_port": 9003,
+      "role": "fast throughput",
+      "model": "Qwen3.6-35B-A3B-IQ3_M.gguf",
+      "quant": "IQ3_M",
+      "context": 32768,
+      "parallel": 4,
+      "can_think": true,
+      "quality_tier": "fast",
+      "chat_template": "qwen36"
+    }
+  ]
+}

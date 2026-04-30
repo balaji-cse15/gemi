@@ -1,0 +1,50 @@
+{
+  "active": "",
+  "profiles": {
+    "code": {
+      "agent": "local-agent-1",
+      "yolo": false,
+      "plan_mode": false,
+      "autopilot": false,
+      "theme": "dark",
+      "workspace": "",
+      "description": "General coding"
+    },
+    "precision": {
+      "agent": "local-agent-2",
+      "yolo": false,
+      "plan_mode": true,
+      "autopilot": false,
+      "theme": "dark",
+      "workspace": "",
+      "description": "Hardest problems with plan mode"
+    },
+    "fast": {
+      "agent": "local-agent-3",
+      "yolo": false,
+      "plan_mode": false,
+      "autopilot": false,
+      "theme": "dark",
+      "workspace": "",
+      "description": "High throughput batch work"
+    },
+    "yolo": {
+      "agent": "local-agent-1",
+      "yolo": true,
+      "plan_mode": false,
+      "autopilot": false,
+      "theme": "dark",
+      "workspace": "",
+      "description": "All dangerous tools enabled (CTF / hackathon)"
+    },
+    "auto": {
+      "agent": "local-agent-1",
+      "yolo": false,
+      "plan_mode": false,
+      "autopilot": true,
+      "theme": "dark",
+      "workspace": "",
+      "description": "Pure autopilot with subgoal tracking"
+    }
+  }
+}

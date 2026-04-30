@@ -1,0 +1,19 @@
+[
+  {
+    "_comment": "Drop this as ~/.gemi/hooks.json to enable. Hooks fire on: PreToolUse, PostToolUse, UserPromptSubmit, Stop, SessionStart, AgentSwitch.",
+
+    "event": "PreToolUse",
+    "matcher": "bash|powershell",
+    "command": "echo [hook] shell call > NUL",
+    "timeout": 5,
+    "block_on_failure": false,
+    "description": "Audit shell commands"
+  },
+  {
+    "event": "PostToolUse",
+    "matcher": "write_file|edit_file",
+    "command": "echo [hook] file written",
+    "timeout": 5,
+    "description": "Notify on file writes"
+  }
+]
