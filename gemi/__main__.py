@@ -6,6 +6,18 @@ import sys
 from pathlib import Path
 
 
+if sys.platform == "win32":
+    # Default cmd.exe codepage (cp1252) can't encode the glyphs Rich uses
+    # (✻, ✓, ◇, …). Reconfigure stdout/stderr to UTF-8 so unicode rendering
+    # works regardless of the user's console codepage. PowerShell 7 already
+    # defaults to UTF-8; this fixes legacy cmd.exe and CI runners.
+    for _stream in (sys.stdout, sys.stderr):
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, OSError):
+            pass
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="gemi",
