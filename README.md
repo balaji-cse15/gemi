@@ -5,6 +5,15 @@
 > 100+ built-in tools (file, shell, web, security, free public APIs),
 > hooks, caching, energy/cost tracking.
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Platform: Windows](https://img.shields.io/badge/platform-Windows-lightgrey)](#install)
+[![Status: Beta](https://img.shields.io/badge/status-beta-yellow)](#)
+
+<p align="center">
+  <img src="assets/banner.svg" alt="Gemi banner showing Local Agent 2 ready" width="800"/>
+</p>
+
 ```
    ######  ######## ##     ## ####
   ##    ## ##       ###   ###  ##
@@ -117,6 +126,55 @@ Where Claude Code talks to the Anthropic API, Gemi talks to *your* fleet.
 
 ---
 
+## Screenshots
+
+### Agent picker — `Ctrl+M` mid-prompt or run `gemi` with no args
+
+<p align="center"><img src="assets/picker.svg" alt="Agent picker UI showing 10 agents with status, quant, context, and role" width="850"/></p>
+
+Numeric quick-pick (`1`–`9`, `0`), slug typing, mode toggles (`y`/`p`/`a`),
+or `Esc` to cancel. The currently active agent is marked with `✓`; running
+agents have a green `●`, offline ones a dim `○`.
+
+### Fleet status — `gemi -Status`
+
+<p align="center"><img src="assets/status.svg" alt="Fleet status table showing 5 agents with quant, context, status" width="900"/></p>
+
+Pure-PowerShell port-based detection — works regardless of how an agent
+was started.
+
+### Streaming + tool calls — typical exchange in the REPL
+
+<p align="center"><img src="assets/tool-result.svg" alt="Streaming response with a read_file tool call rendered inline" width="850"/></p>
+
+Tool calls render as tree-connector nodes (`⎯◇⎯` open / `⎯✓⎯` success /
+`⎯✗⎯` error). File reads get syntax-highlighted previews. The footer
+shows token counts, elapsed time, tool count, and per-turn cost.
+
+### Free public APIs — no keys required
+
+<p align="center"><img src="assets/free-apis.svg" alt="Two free-API tool calls in parallel: weather and crypto_price" width="800"/></p>
+
+13 free-API tools: `weather`, `currency`, `wiki`, `arxiv_search`,
+`hn_top`, `reddit`, `nasa_apod`, `country`, `ip_lookup`,
+`crypto_price`, `pokemon`, `stackexchange`, plus `web_search`.
+
+### `/help` — 70+ commands across 12 categories
+
+<p align="center"><img src="assets/help.svg" alt="/help output showing categorized commands" width="900"/></p>
+
+Categories: Session · Modes · Fleet · Shell · Tools · Background ·
+Templates · Navigation · Tuning · Display · Logging · System.
+
+### YOLO activation — runtime ethics reminder
+
+<p align="center"><img src="assets/yolo-warning.svg" alt="YOLO mode activation showing the legal/ethical use disclaimer" width="800"/></p>
+
+First time YOLO turns on in any session, the CLI prints this prominent
+authorization reminder. See [DISCLAIMER.md](DISCLAIMER.md).
+
+---
+
 ## Quick start
 
 ### 1. Prerequisites
@@ -166,6 +224,183 @@ gemi.bat
 ```
 
 You'll see the picker. Pick an agent, drop into the REPL.
+
+---
+
+## Feature deep-dive
+
+### Three-tier permission model
+
+Every tool falls into one of three tiers:
+
+| Tier | Examples | Default behaviour |
+|---|---|---|
+| **SAFE** (read-only) | `read_file`, `grep`, `tree`, `glob`, `wiki`, `weather`, `cipher_detect`, `web_fetch` | Always allowed; no prompts |
+| **WRITE** (mutating) | `write_file`, `edit_file`, `python_run`, `npm`, `pip`, `task_runner` | Allowed; pattern-checked against `DANGEROUS_PATTERNS` (e.g. blocks writes to `.env`, `.aws/credentials`) |
+| **YOLO** (dangerous) | `bash`, `cmd`, `powershell`, `git`, `exploits`, all `recon_*`, all `websec_*`, `hash_crack` | **Blocked** unless YOLO mode is on (`--yolo` / `/yolo` / `Ctrl+Y`) |
+
+**Layered on top:** `~/.gemi/permissions.json` adds custom **allow** /
+**deny** rules with regex matchers. Deny rules trump everything (even
+YOLO). Default deny rules ship with Gemi: `rm -rf /`, fork bombs,
+`.ssh/id_rsa`, `.aws/credentials`.
+
+### Multi-agent delegation
+
+```
+> use the precision agent to review this code, then spawn a sub-agent
+  to write the tests in parallel
+```
+
+Three primitives the agent can call:
+
+| Tool | Behaviour |
+|---|---|
+| `agent_call` | One-shot: send a prompt to another agent, get text back. No tools, no recursion. |
+| `agent_vote` | Run the same prompt across N running agents in parallel; show all responses for comparison. |
+| `task` | Spawn a fresh sub-agent with its **own tool loop** (full file/shell/web access), bounded by max-depth=2. |
+
+User-driven equivalents:
+
+```
+> /vote what's the safest way to do X        # parallel across all agents
+> /race what's the answer to Y                # first to finish wins
+> /delegate local-agent-2 review main.py      # explicit one-shot
+> /task fix the failing test in test_foo.py   # full sub-agent
+```
+
+### Autopilot v2
+
+```
+gemi.bat -Profile hackathon       # YOLO + autopilot in one go
+```
+
+Or in the REPL:
+
+```
+> /autopilot
+> implement OAuth2 flow with PKCE and add tests
+```
+
+Autopilot v2 is a sophisticated controller, not a "while True" loop:
+
+- **Subgoal tracking**: parses the model's plan from a fenced ` ```plan` block on the first turn, displays each subgoal's status (○ pending, ◌ running, ● done, ✗ failed, ⊘ skipped) in a Rich Live panel.
+- **Step budget**: configurable caps on rounds (60), tool calls (200), wall-clock time (30 min), consecutive errors (5).
+- **Stall detection**: if the same tool runs 4× in a row, the controller injects a diagnostic prompt asking the model to consider alternatives.
+- **Recovery prompts**: 5 errors in a row triggers a plan-revision request.
+- **Convergence**: ends on either an explicit "task complete" phrase OR all subgoals reaching a terminal state.
+
+Every autopilot session is logged as JSONL to `~/.gemi/logs/` for replay.
+
+### MCP integration
+
+[Model Context Protocol](https://modelcontextprotocol.io) is Anthropic's
+open spec for tool-server interop. Gemi includes a full MCP client with
+both stdio and HTTP/SSE transports.
+
+```json
+{
+  "servers": {
+    "filesystem": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+    },
+    "github": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {"GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"}
+    }
+  }
+}
+```
+
+- `${ENV_VAR}` substitution — keep tokens in your shell, not in the file.
+- Each MCP tool gets registered as `mcp_<server>_<toolname>`.
+- 8 free MCP servers enabled out-of-the-box (filesystem, fetch, memory,
+  sequential-thinking, time, context7, duckduckgo, wikipedia).
+- 7 paid-API templates included as disabled entries (github, supabase,
+  notion, brave-search, etc.) — flip `enabled: true` and set the env
+  var to activate.
+
+### Plugin system
+
+Drop a Python file in `~/.gemi/plugins/`:
+
+```python
+# ~/.gemi/plugins/my_tool.py
+from pathlib import Path
+from gemi.tools.base import Tool, ToolResult
+
+class GreetTool(Tool):
+    name = "greet"
+    description = "Greet the user with a custom message."
+    read_only = True
+    input_schema = {"type": "object", "properties": {
+        "name": {"type": "string"}
+    }, "required": ["name"]}
+
+    def execute(self, workspace: Path, **kwargs) -> ToolResult:
+        return ToolResult.ok(f"Hello, {kwargs.get('name', 'stranger')}!")
+```
+
+It auto-registers on next launch. Crash-isolated — buggy plugins don't
+take down the CLI.
+
+### Smart context filtering
+
+For agents with `context <= 12288` (e.g. an 8K Q8 quant), Gemi
+automatically sends only the curated **essential tools** (~13) instead
+of the full 100+ schema. This keeps tool overhead under ~3K tokens so
+the model has room to actually work on your task. For larger-context
+agents (16K+), the full set is sent.
+
+You can also force essentials with `tool_schemas(essential_only=True)`.
+
+### Energy & cost tracking
+
+Local inference doesn't cost API dollars but it DOES cost electricity.
+Gemi estimates per-turn kWh + USD based on:
+
+```
+kWh = (gpu_watts + cpu_overhead) × quant_multiplier × elapsed / 3600 / 1000
+USD = kWh × rate_usd_per_kwh
+```
+
+Quant multipliers range from `0.55×` (Q2_K_P) up to `3.50×` (F32).
+Defaults: 350W GPU + 50W system, $0.15/kWh — configurable in
+`~/.gemi/config.json`. Per-session, daily, by-agent, and lifetime totals
+persist to `~/.gemi/costs.json`. View with `/spend`.
+
+### Hooks
+
+Six lifecycle events emit JSON-RPC-style payloads to user-defined
+shell commands:
+
+| Event | When | Can block? |
+|---|---|---|
+| `PreToolUse` | Before any tool runs | Yes (non-zero exit) |
+| `PostToolUse` | After a tool completes | Yes (mutate output) |
+| `UserPromptSubmit` | When a prompt is submitted | No |
+| `Stop` | When a turn ends | No |
+| `SessionStart` | When a session begins | No |
+| `AgentSwitch` | When `/agent` switches | No |
+
+Use cases: audit logs, security gating, auto-formatters on file writes,
+git auto-commits, etc.
+
+### Profiles
+
+Saved bundles of `agent + modes + theme + workspace`:
+
+```cmd
+gemi.bat -Profile pentest      :: precision agent + YOLO + offensive tools
+gemi.bat -Profile hackathon    :: fast agent + YOLO + autopilot
+gemi.bat -Profile review       :: orchestrator + plan mode
+gemi.bat -Profile webdev       :: coding agent for Next.js/React/FastAPI
+```
+
+12 profiles ship by default. Save your own with `/profile save myname`.
 
 ---
 
