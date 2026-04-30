@@ -46,12 +46,14 @@ jobs:
             *) echo "::error::expected 'gemi 0.1.0', got '$out'"; exit 1 ;;
           esac
           gemi --help | grep -q "usage: gemi"
-          # tool count moves up over time — just check it's healthy + structured
-          tools_summary=$(gemi --list-tools 2>&1 | tail -1)
-          echo "tools: $tools_summary"
-          echo "$tools_summary" | grep -q "SAFE" || { echo "::error::list-tools missing SAFE row"; exit 1; }
-          echo "$tools_summary" | grep -q "WRITE" || { echo "::error::list-tools missing WRITE row"; exit 1; }
-          echo "$tools_summary" | grep -q "YOLO" || { echo "::error::list-tools missing YOLO row"; exit 1; }
+          # tool count moves up over time — just check it's healthy + structured.
+          # The summary row is "  N SAFE | N WRITE | N YOLO | N total" near the
+          # tail; look at the whole capture (not just the last line, which is
+          # blank from rich.print's trailing newline).
+          tools_out=$(gemi --list-tools 2>&1)
+          summary=$(printf '%s\n' "$tools_out" | grep -E 'SAFE.*WRITE.*YOLO.*total' || true)
+          echo "tools summary: ${summary:-<<empty>>}"
+          [ -n "$summary" ] || { echo "::error::list-tools missing SAFE/WRITE/YOLO summary row"; exit 1; }
           gemi --list-sessions > /dev/null
 
       - name: Compile-check every Python file
