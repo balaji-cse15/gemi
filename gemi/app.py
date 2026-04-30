@@ -262,7 +262,7 @@ class BuddyApp:
             elif result.text:
                 self.console.print(result.text)
             if result.error:
-                self.console.print(f"[error]{result.error}[/error]", file=self.console.file)
+                self.console.print(f"[error]{result.error}[/error]")
                 return 1
             return 0
         except ProviderError as e:
