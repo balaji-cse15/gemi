@@ -45,8 +45,31 @@ hooks.json
 permissions.json
 profiles.json
 .env
-.env.local
+.env.*
+!.env.example
+!.env.template
 *.pid
+
+# Credentials & API keys — block by name pattern as a backstop in case a
+# user drops one in the project root.
+*credentials*
+*credential*.json
+*.pem
+*.key
+*.pfx
+*.p12
+*.crt
+*token*.json
+*token*.txt
+*secret*.json
+*secret*.txt
+*.htpasswd
+service-account*.json
+auth-token*
+.netrc
+.ssh/
+id_rsa*
+id_ed25519*
 
 # Model files (multi-GB binaries; users download themselves)
 *.gguf

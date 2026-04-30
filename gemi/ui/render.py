@@ -6,11 +6,43 @@ Beautified v0.11+ with:
   - Status icons (✓ ✗ ◐ ◌) coloured by tier and outcome
   - Word-level diff highlighting
   - Dim/active rendering for cached vs fresh tool results
+
+v0.2 (post-Claude-Code-source-study):
+  - todo_write tool calls auto-render the TodoWrite widget instead of
+    raw text — see _try_todo_widget below.
+  - Setting GEMI_COMPACT_RENDER=1 switches every tool call/result to the
+    Claude-Code-exact `⏺ Tool(args)` / `  ⎿ result` form. The verbose
+    tree-connector form is still the default.
 """
 from __future__ import annotations
 
+import os
 import re
 from typing import Any
+
+
+def _compact_mode() -> bool:
+    """Check whether the user opted into Claude-Code-style compact rendering."""
+    val = os.environ.get("GEMI_COMPACT_RENDER", "").lower()
+    return val in ("1", "true", "yes", "on")
+
+
+def _compact_label(tool_name: str) -> str:
+    """Pretty action verb for compact result labels."""
+    return {
+        "read_file": "Read",
+        "write_file": "Wrote",
+        "edit_file": "Edited",
+        "delete_file": "Deleted",
+        "glob": "Found",
+        "grep": "Matched",
+        "bash": "Output",
+        "powershell": "Output",
+        "cmd": "Output",
+        "git": "Output",
+        "web_fetch": "Fetched",
+        "web_search": "Searched",
+    }.get(tool_name, "Output")
 
 from rich.box import HEAVY, ROUNDED, SIMPLE
 from rich.columns import Columns
@@ -170,7 +202,28 @@ def _render_turn_footer(console: Console, result: TurnResult) -> None:
 # TOOL CALL — header rendering (when call starts)
 # ============================================================================
 
+def _try_todo_widget(console: Console, name: str, output: str) -> bool:
+    """If this is a todo_write result, render the widget instead of raw text.
+
+    Returns True if handled, False if the caller should fall through to the
+    normal tool-result renderer.
+    """
+    if name != "todo_write":
+        return False
+    try:
+        from ..tools.todo import TodoWriteTool
+        from .todo_widget import TodoItem, print_todo_update
+        items = [TodoItem.from_dict(d) for d in TodoWriteTool.current_todos()]
+        print_todo_update(console, items)
+        return True
+    except Exception:
+        return False
+
+
 def render_tool_call(console: Console, name: str, args: dict[str, Any], tool_id: str) -> None:
+    if _compact_mode():
+        from .render_compact import render_tool_call_compact
+        return render_tool_call_compact(console, name, args)
     from ..tools.registry import get_tool
     p = get_palette(get_active_theme_name())
     icon = _icon(name)
@@ -202,10 +255,24 @@ def render_tool_call(console: Console, name: str, args: dict[str, Any], tool_id:
 # ============================================================================
 
 def render_tool_result(console: Console, result: dict[str, Any]) -> None:
-    p = get_palette(get_active_theme_name())
     name = result.get("name", "?")
     output = result.get("output", "")
     is_error = result.get("is_error", False)
+
+    # TodoWrite gets first-class treatment: render the widget instead of the
+    # raw confirmation string. Works regardless of compact-mode setting.
+    if not is_error and _try_todo_widget(console, name, output):
+        return
+
+    if _compact_mode():
+        from .render_compact import render_tool_result_compact, output_summary
+        if is_error:
+            render_tool_result_compact(console, output[:120].splitlines()[0] if output else "(error)", is_error=True)
+        else:
+            render_tool_result_compact(console, output_summary(output, label=_compact_label(name)))
+        return
+
+    p = get_palette(get_active_theme_name())
     args = result.get("args", {})
     cached = result.get("cached", False)
 
