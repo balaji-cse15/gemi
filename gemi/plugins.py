@@ -61,7 +61,7 @@ def _ensure_dir() -> None:
 
 def _import_file(path: Path) -> tuple[Any | None, str]:
     """Import a Python file as an isolated module. Returns (module, error)."""
-    module_name = f"buddy_plugin_{path.stem}"
+    module_name = f"gemi_plugin_{path.stem}"
     try:
         spec = importlib.util.spec_from_file_location(module_name, path)
         if spec is None or spec.loader is None:
@@ -154,7 +154,7 @@ def reload() -> list[PluginInfo]:
             TOOL_REGISTRY.pop(name, None)
 
     # Drop module entries so re-import is fresh
-    to_drop = [k for k in sys.modules if k.startswith("buddy_plugin_")]
+    to_drop = [k for k in sys.modules if k.startswith("gemi_plugin_")]
     for k in to_drop:
         sys.modules.pop(k, None)
 

@@ -1,0 +1,19 @@
+{
+  "_comment": "Optional per-agent llama-server config. Most fields here mirror the constants at the top of start.ps1, kept here so other tooling (or a custom start.ps1 wrapper) can read them. start.ps1 in this template doesn't read this file by default — it uses inline constants for simplicity.",
+
+  "agent": "Local Agent 1",
+  "model": "Qwen3.6-35B-A3B-Q4_K_M.gguf",
+  "kind": "gguf",
+  "host": "127.0.0.1",
+  "port": 8001,
+  "context": 16384,
+  "n_gpu_layers": 99,
+  "flash_attn": true,
+  "parallel": 2,
+  "batch_size": 1024,
+  "ubatch_size": 512,
+  "kv_cache_type_k": "q8_0",
+  "kv_cache_type_v": "q8_0",
+  "threads": 8,
+  "chat_template_file": "../../../Gemi/gemi/templates/qwen36_tool_call_fix.jinja"
+}

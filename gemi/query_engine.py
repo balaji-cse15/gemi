@@ -5,7 +5,7 @@ Permission model (three tiers, plus rule overrides):
   2. WRITE tools (dangerous=False, read_only=False) → allowed, pattern-checked
   3. DANGEROUS tools (dangerous=True) → BLOCKED unless bypass_permissions (YOLO)
 
-Per-call overrides (via buddy.permissions):
+Per-call overrides (via gemi.permissions):
   - DENY rules:  block even in YOLO mode
   - ALLOW rules: skip pattern check in non-YOLO mode
 

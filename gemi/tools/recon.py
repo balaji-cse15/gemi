@@ -26,7 +26,7 @@ import httpx
 from .base import Tool, ToolResult
 
 
-_UA = "Mozilla/5.0 (Buddy recon)"
+_UA = "Mozilla/5.0 (Gemi recon)"
 
 
 def _http_json(url: str, params: dict | None = None,

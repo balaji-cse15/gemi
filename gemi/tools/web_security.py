@@ -22,7 +22,7 @@ import httpx
 from .base import Tool, ToolResult
 
 
-_UA = "Mozilla/5.0 (Buddy websec)"
+_UA = "Mozilla/5.0 (Gemi websec)"
 
 
 # ---------------------------------------------------------------- headers
@@ -238,7 +238,7 @@ class WebsecXssSmokeTool(Tool):
         "type": "object",
         "properties": {
             "url": {"type": "string"},
-            "tracer": {"type": "string", "default": "buddy<>'\"$#test"},
+            "tracer": {"type": "string", "default": "gemi<>'\"$#test"},
         },
         "required": ["url"],
     }
@@ -247,7 +247,7 @@ class WebsecXssSmokeTool(Tool):
         url = (kwargs.get("url") or "").strip()
         if not url:
             return ToolResult.fail("missing url")
-        tracer = kwargs.get("tracer") or "buddy<>'\"$#test"
+        tracer = kwargs.get("tracer") or "gemi<>'\"$#test"
 
         parsed = urlparse(url)
         params = parse_qs(parsed.query, keep_blank_values=True)

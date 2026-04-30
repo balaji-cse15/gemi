@@ -20,7 +20,7 @@ import httpx
 from .base import Tool, ToolResult
 
 
-_UA = "Mozilla/5.0 (Buddy api-test)"
+_UA = "Mozilla/5.0 (Gemi api-test)"
 
 
 # ---------------------------------------------------------------- GraphQL introspect

@@ -138,7 +138,7 @@ class GitTool(Tool):
         wf = kw.get("workflow", "").strip()
 
         if wf == "commit-all":
-            msg = kw.get("message") or "buddy: auto-commit"
+            msg = kw.get("message") or "gemi: auto-commit"
             steps = [
                 [git, "add", "-A"],
                 [git, "commit", "-m", msg],

@@ -1,13 +1,14 @@
-"""Workspace context loader — auto-discovers BUDDY.md, CLAUDE.md, AGENTS.md.
+"""Workspace context loader — auto-discovers GEMI.md, CLAUDE.md, AGENTS.md.
 
 Walks UP from the workspace directory to the filesystem root looking for
 project-specific context files. The closest one wins (most-specific to least).
 
 Files (in priority order):
-  1. BUDDY.md       — Buddy-specific instructions
-  2. CLAUDE.md      — Claude Code-style instructions (compatibility)
-  3. AGENTS.md      — Agent-fleet-specific instructions
-  4. .buddy/context.md   — Hidden context file
+  1. GEMI.md       — Gemi-specific instructions
+  2. BUDDY.md      — Buddy-era instructions (compatibility)
+  3. CLAUDE.md     — Claude Code-style instructions (compatibility)
+  4. AGENTS.md     — Agent-fleet-specific instructions
+  5. .gemi/context.md   — Hidden context file
 
 The loader stops walking up at the first git repo root (.git/) it finds,
 so context doesn't leak across unrelated projects.
@@ -20,7 +21,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-CONTEXT_FILENAMES = ["BUDDY.md", "CLAUDE.md", "AGENTS.md", ".buddy/context.md"]
+CONTEXT_FILENAMES = ["GEMI.md", "BUDDY.md", "CLAUDE.md", "AGENTS.md", ".gemi/context.md"]
 # Tight caps so small-context agents (8K) aren't overwhelmed by a single
 # large project doc. Users can read the full file via /cat <name>.md.
 MAX_TOTAL_CHARS = 4_000

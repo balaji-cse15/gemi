@@ -501,7 +501,7 @@ def cmd_export(app: "BuddyApp", args: list[str]) -> None:
         app.console.print("[dim]Nothing to export.[/dim]")
         return
     md = app.engine.export_markdown()
-    filename = args[0] if args else f"buddy_export_{int(__import__('time').time())}.md"
+    filename = args[0] if args else f"gemi_export_{int(__import__('time').time())}.md"
     fp = app.workspace / filename
     fp.write_text(md, encoding="utf-8")
     app.console.print(f"[success]Exported {len(app.engine.messages)} messages to {fp.name}[/success]")
@@ -545,7 +545,7 @@ def cmd_retry(app: "BuddyApp", args: list[str]) -> None:
 def cmd_config(app: "BuddyApp", args: list[str]) -> None:
     from ..tools.registry import ALL_TOOLS
     app.console.print(f"\n[command]Configuration:[/command]")
-    app.console.print(f"  Version:      {__import__('buddy').__version__}")
+    app.console.print(f"  Version:      {__import__('gemi').__version__}")
     app.console.print(f"  Workspace:    {app.workspace}")
     app.console.print(f"  Tools:        {len(ALL_TOOLS)}")
     app.console.print(f"  Commands:     {len(COMMANDS)}")
@@ -1908,7 +1908,7 @@ def cmd_jobs(app: "BuddyApp", args: list[str]) -> None:
     )
 
 
-@register("logs", "Show recent buddy log events (structured JSONL)")
+@register("logs", "Show recent gemi log events (structured JSONL)")
 def cmd_logs(app: "BuddyApp", args: list[str]) -> None:
     from .. import logger as logger_module
     from ..ui.theme import get_palette, get_active_theme_name

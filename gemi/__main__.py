@@ -1,4 +1,4 @@
-"""Entry point for `python -m buddy` or the `buddy` command."""
+"""Entry point for `python -m gemi` or the `gemi` command."""
 from __future__ import annotations
 
 import argparse
@@ -8,7 +8,7 @@ from pathlib import Path
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="buddy",
+        prog="gemi",
         description="Claude-Code-like CLI wired to local agent fleet",
     )
     parser.add_argument(
@@ -78,7 +78,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.version:
         from . import __version__
-        print(f"buddy {__version__}")
+        print(f"gemi {__version__}")
         return 0
 
     from .config import FLEET, get_agent
@@ -118,7 +118,7 @@ def main(argv: list[str] | None = None) -> int:
                     f"  {s['id'][:40]:40} {s['agent']:20} "
                     f"{s['turns']} turns  {s['saved_at']}"
                 )
-            console.print(f"\n[dim]Resume with: buddy --resume <session-id>[/dim]\n")
+            console.print(f"\n[dim]Resume with: gemi --resume <session-id>[/dim]\n")
         return 0
 
     agent = get_agent(args.agent) if args.agent else None

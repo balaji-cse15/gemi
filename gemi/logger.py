@@ -1,7 +1,7 @@
 """Structured logging — JSONL event stream for replay, debugging, and analytics.
 
-Every interesting buddy event (turn, tool call, hook fire, error, agent switch)
-is emitted as a single JSON line to ~/.gemi/logs/buddy-YYYYMMDD.jsonl.
+Every interesting gemi event (turn, tool call, hook fire, error, agent switch)
+is emitted as a single JSON line to ~/.gemi/logs/gemi-YYYYMMDD.jsonl.
 
 Logs are rotated by day, ring-buffered in memory (last 1000 events), and
 streamable via the /logs command.
@@ -36,7 +36,7 @@ class LogEvent:
 
 
 def _today_path() -> Path:
-    return LOG_DIR / f"buddy-{time.strftime('%Y%m%d')}.jsonl"
+    return LOG_DIR / f"gemi-{time.strftime('%Y%m%d')}.jsonl"
 
 
 class _Logger:

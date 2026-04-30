@@ -26,7 +26,7 @@ def _git_branch(workspace) -> str:
 def print_banner(
     console: Console,
     agent: AgentDef | None,
-    version: str = "0.16.0",
+    version: str = "0.1.0",
     workspace=None,
 ) -> None:
     """Minimal startup banner.
@@ -44,7 +44,7 @@ def print_banner(
     console.print()
     line1 = Text()
     line1.append("  ✻ ", style=f"bold {palette.buddy}")
-    line1.append("Buddy", style=f"bold {palette.buddy}")
+    line1.append("Gemi", style=f"bold {palette.buddy}")
     line1.append(f"  v{version}", style="muted")
     if agent:
         line1.append("  ·  ", style="dim")

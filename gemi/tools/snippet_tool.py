@@ -7,7 +7,7 @@ from typing import Any
 
 from .base import Tool, ToolResult
 
-SNIPPETS_FILE = ".buddy_snippets.json"
+SNIPPETS_FILE = ".gemi_snippets.json"
 
 
 class SnippetTool(Tool):

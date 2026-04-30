@@ -1,7 +1,7 @@
 """WebSearchTool — DuckDuckGo HTML search (no API key required).
 
 Uses the lite HTML endpoint and parses results with regex. No external
-dependencies beyond httpx (already a buddy dep). Returns top N results
+dependencies beyond httpx (already a gemi dep). Returns top N results
 as title, URL, and snippet.
 
 NOT a YOLO tool — read-only web access, same tier as web_fetch.

@@ -236,7 +236,7 @@ def _start_stdio_server(server: McpServer) -> bool:
         _send_stdio_request(server, "initialize", {
             "protocolVersion": "2024-11-05",
             "capabilities": {},
-            "clientInfo": {"name": "buddy", "version": "0.13.0"},
+            "clientInfo": {"name": "gemi", "version": "0.1.0"},
         }, timeout=15)
         _send_stdio_notification(server, "notifications/initialized")
         server.initialized = True
@@ -321,7 +321,7 @@ def _start_http_server(server: McpServer) -> bool:
         _send_http_request(server, "initialize", {
             "protocolVersion": "2024-11-05",
             "capabilities": {},
-            "clientInfo": {"name": "buddy", "version": "0.13.0"},
+            "clientInfo": {"name": "gemi", "version": "0.1.0"},
         }, timeout=server.timeout)
         server.initialized = True
         return True
@@ -482,12 +482,12 @@ def initialize_all() -> dict[str, Any]:
         tools = _list_server_tools(server)
         registered = 0
         for tdef in tools:
-            buddy_tool = McpTool(server, tdef)
-            if buddy_tool.name in TOOL_REGISTRY:
+            wrapper = McpTool(server, tdef)
+            if wrapper.name in TOOL_REGISTRY:
                 continue
-            ALL_TOOLS.append(buddy_tool)
-            TOOL_REGISTRY[buddy_tool.name] = buddy_tool
-            server.tool_names.append(buddy_tool.name)
+            ALL_TOOLS.append(wrapper)
+            TOOL_REGISTRY[wrapper.name] = wrapper
+            server.tool_names.append(wrapper.name)
             registered += 1
         server.tools_count = registered
         summary[name] = {"ok": True, "tools": registered, "error": ""}
