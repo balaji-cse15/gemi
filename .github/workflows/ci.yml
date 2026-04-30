@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  smoke-test:
+    name: pip install + CLI smoke
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ['3.11', '3.12']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Smoke-test CLI flags
+        shell: bash
+        run: |
+          set -e
+          out=$(gemi --version)
+          echo "version: $out"
+          case "$out" in
+            "gemi 0.1.0") ;;
+            *) echo "::error::expected 'gemi 0.1.0', got '$out'"; exit 1 ;;
+          esac
+          gemi --help | grep -q "usage: gemi"
+          gemi --list-tools > /dev/null
+          gemi --list-sessions > /dev/null
+
+      - name: Compile-check every Python file
+        run: |
+          python -m compileall -q gemi
